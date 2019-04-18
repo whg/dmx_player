@@ -1,6 +1,8 @@
 #include <SPI.h>
 #include <SD.h>
 
+// framerate is limited to 255fps
+
 //#define DEBUG
 #define INITIAL_DELAY 60 // seconds
 
