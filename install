@@ -1,0 +1,4 @@
+#!/bin/bash
+
+sudo ln -s "$(pwd)/vezer2csv.py" /usr/local/bin/vezer2csv
+sudo ln -s "$(pwd)/csv2raw.py" /usr/local/bin/csv2raw
