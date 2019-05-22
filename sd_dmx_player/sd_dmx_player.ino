@@ -93,7 +93,8 @@ void setup() {
 #endif
 
     uint8_t framerate = dataFile.read();
-    if (version == 2) {
+    // intial versions of raw files had 23 has header
+    if (version == 7) { 
       framerate = 44;
     }
 
