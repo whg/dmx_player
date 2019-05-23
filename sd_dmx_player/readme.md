@@ -27,9 +27,11 @@ x
 
 The trigger pin is configured to be active low, i.e. it enables the pull up resistor. To use it, `#define TRIGGER_PIN` with some pin number.
 
+When pressed this pauses or plays the file.
+
 ### NUM_RUNS
 
-If this is `#define`d then the player will stop after that number. If `TRIGGER_PIN` is defined then this it the player will be able to start again from beginning if it receives a trigger.
+If this is `#define`d then the player will stop after that number. If `TRIGGER_PIN` is defined then this it the player will be able to start again from beginning if it receives a trigger after it's stopped.
 
 ### TIMEOUT_SECONDS
 

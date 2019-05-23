@@ -26,9 +26,10 @@ uint16_t numChannels;
 uint32_t numRows, frameCounter, runCounter;
 uint32_t lastFrameTime;
 uint32_t frameDelay;
+uint32_t lastTriggerTime = 0;
 
 #ifdef TIMEOUT_SECONDS
-uint32_t lastTriggerPinTime = 0;
+uint32_t lastTriggerPinChangeTime = 0;
 uint8_t lastTriggerPinState;
 #endif
 
@@ -132,6 +133,7 @@ void setup() {
 #ifdef TRIGGER_PIN
   triggerPin = TRIGGER_PIN;
   state = STOPPED;
+  lastTriggerPinState = 0xff; // not 1 or 0
 #endif
 
 
@@ -146,22 +148,31 @@ void setup() {
 
 void loop() {
 #ifdef TRIGGER_PIN
+  uint32_t now = millis();
   uint8_t triggerState = digitalRead(triggerPin);
-  if (triggerState == LOW) {
-    if (state == STOPPED) {
-      reset();
+  
+  if (triggerState == LOW && now - lastTriggerTime > 100) { // debounce
+    switch (state) {
+    case STOPPED:
+      reset(); // no break
+    case PAUSED:
+      state = PLAYING;
+      break;
+    case PLAYING:
+      state = PAUSED;
+      break;  
     }
-    state = PLAYING;
+
+    lastTriggerTime = now;
   }
 
-#ifdef TIMEOUT_SECONDS
-  uint32_t now = millis();
   if (triggerState != lastTriggerPinState) {
-    lastTriggerPinTime = now;
+    lastTriggerPinChangeTime = now;
     lastTriggerPinState = triggerState;
   }
 
-  if (now - lastTriggerPinTime >= static_cast<uint32_t>(TIMEOUT_SECONDS * 1000)) {
+#ifdef TIMEOUT_SECONDS
+  if (now - lastTriggerPinChangeTime >= static_cast<uint32_t>(TIMEOUT_SECONDS * 1000)) {
     state == PAUSED;
   }
 #endif
