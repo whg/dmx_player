@@ -58,7 +58,7 @@ class Composition(BaseElement):
                 for track in self.tracks:
                     values = track.values(frame_number)
                     for chan, value in values.items():
-                        row[chan - 1] = str(value)
+                        row[chan] = str(value)
                 f.write(f'{",".join(row)}\n')
             
                 
